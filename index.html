@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body, html {
+                height: 100%;
+                display: grid;
+            }
+
+            body {
+                background-color: #4F5400;
+                font-family: "monospace";
+            }
+
+            #entrypoint {
+                border: 1px solid #F0FF19;
+                border-radius: 1em;
+                font-family: "monospace";
+            }
+
+            #welcome {
+                font-size: 5rem;
+                text-align: center;
+                margin: auto;
+            }
+
+            #player {
+                visibility: hidden;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <section id="welcome">
+            <h1>enter if you dare</h1>
+            <button id="entrypoint">you won't though</button>
+        </section>
+        <div id="player"></div>
+        <script>
+            const tag = document.createElement('script');
+            
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            var player;
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('player', {
+                    height: window.innerHeight,
+                    width: window.innerWidth,
+                    videoId: 'VVggXZPCuYw',
+                    playerVars: {
+                        'controls': 0,
+                        'loop': 1,
+                        'playsinline': 1
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                })
+            }
+
+            function onPlayerReady(event) {
+                player.setVolume(100);
+                event.target.playVideo();
+            }
+
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.ENDED) {
+                    player.seekTo(0);
+                    player.playVideo();
+                }
+            }
+
+            const entrypoint = document.getElementById("entrypoint");
+            entrypoint.addEventListener('click', e => {
+                console.log("hello");
+                document.getElementById("player").style.visibility = "visible";
+                document.getElementById("welcome").style.visibility = "hidden";
+                player.playVideo();
+            })
+        </script>
+    </body>
+</html>
